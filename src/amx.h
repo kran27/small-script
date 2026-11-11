@@ -7,7 +7,11 @@
  */
 
 #if defined LINUX
-  #include <sclinux.h>
+  /* `<sclinux.h>` was a 2003-era Pawn shim that no longer ships with
+   * the source (the Van Buren port never recreated it). Pull in the
+   * POSIX headers it would have provided directly so the Linux-native
+   * build resolves `unlink`, `access`, etc. */
+  #include <unistd.h>
 #endif
 
 #ifndef __AMX_H
@@ -126,7 +130,7 @@ typedef struct {
 } AMX_NATIVE_INFO       PACKED;
 
 #define AMX_USERNUM     4
-#define sEXPMAX         19
+#define sEXPMAX         35
 typedef struct {
   uint32_t address      PACKED;
   char name[sEXPMAX+1]  PACKED;

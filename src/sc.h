@@ -44,7 +44,7 @@
 #define sDIMEN_MAX     2    /* maximum number of array dimensions */
 #define sDEF_LITMAX  500    /* initial size of the literal pool, in "cells" */
 #define sLINEMAX     511    /* input line length (in characters) */
-#define sNAMEMAX      31    /* significant length of symbol name */
+#define sNAMEMAX      63    /* significant length of symbol name */
 #define sDEF_AMXSTACK 4096  /* default stack size for AMX files */
 #define sSTKMAX       80    /* stack for nested #includes and other uses */
 #define PREPROC_TERM  '\x7f'/* termination character for preprocessor expressions (the "DEL" code) */

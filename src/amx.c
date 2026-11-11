@@ -11,7 +11,7 @@
 #include <stdarg.h>
 #include <string.h>
 #if defined LINUX
-  #include <sclinux.h>
+  #include <unistd.h>  /* sclinux.h shim - replaced */
 #endif
 #if defined JIT
   #include <windows.h>

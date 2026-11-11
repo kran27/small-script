@@ -11,7 +11,7 @@
 #include <string.h>
 #include <ctype.h>
 #if defined LINUX
-  #include <sclinux.h>
+  #include <unistd.h>  /* sclinux.h shim - replaced */
 #endif
 #if defined FORTIFY
   #include "fortify.h"
@@ -661,8 +661,15 @@ SC_FUNC void assemble(FILE *fout,FILE *fin)
   #if BYTE_ORDER==BIG_ENDIAN
     hdr.flags|=AMX_FLAG_BIGENDIAN;
   #endif
-  hdr.defsize=sEXPMAX+1+sizeof(unsigned long);
+  /* AMX_FUNCSTUB is `uint32_t address + char name[sEXPMAX+1]` = 40
+   * bytes. The original code computed this as
+   * `sEXPMAX + 1 + sizeof(unsigned long)`, but on 64-bit Linux
+   * `unsigned long` is 8 bytes (LP64), giving 44 - the engine
+   * rejects the AMX with a header-mismatch on amx_Init. Use
+   * `sizeof(uint32_t)` so the layout matches the actual struct. */
+  hdr.defsize=sEXPMAX+1+sizeof(uint32_t);
   assert((hdr.defsize % sizeof(cell))==0);
+  assert(hdr.defsize == sizeof(AMX_FUNCSTUB));
   hdr.publics=sizeof hdr; /* public table starts right after the header */
   hdr.natives=hdr.publics + numpublics*sizeof(AMX_FUNCSTUB);
   hdr.libraries=hdr.natives + numnatives*sizeof(AMX_FUNCSTUB);

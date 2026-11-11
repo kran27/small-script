@@ -25,6 +25,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined __unix__ || defined __linux__ || defined __APPLE__
+  #include <unistd.h>   /* unlink() */
+#endif
 
 #if UINT_MAX > 0xFFFFU
   #define MAXSIZE 1024*1024L

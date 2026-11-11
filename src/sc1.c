@@ -22,7 +22,9 @@
 
 #if defined LINUX
   #include <unistd.h>
-  #include <sclinux.h>
+  /* `<sclinux.h>` was a Pawn 2003 Linux shim no longer in tree;
+   * `<unistd.h>` above covers the actual symbols it would have
+   * provided (`access`, `unlink`, etc.). */
 #endif
 
 #if defined FORTIFY

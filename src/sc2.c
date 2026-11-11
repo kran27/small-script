@@ -13,7 +13,7 @@
 #include <math.h>
 #include "sc.h"
 #if defined LINUX
-  #include <sclinux.h>
+  #include <unistd.h>  /* sclinux.h shim - replaced */
 #endif
 
 #if defined FORTIFY
@@ -545,7 +545,11 @@ static int ftoi(cell *val,char *curptr)
        * format (as mandated in the ANSI standard). Test this assumption anyway.
        */
       { float test1 = 0.0, test2 = 50.0;
-        assert(*(long*)&test1==0x00000000L && *(long*)&test2==0x42480000L);
+        /* On 64-bit Linux `long` is 8 bytes but `float` is still 4,
+         * so the original `*(long*)&float` cast reads 4 bytes past
+         * the float and the assertion spuriously fires. Use a 32-bit
+         * type to match the float's storage. */
+        assert(*(int32_t*)&test1==0x00000000L && *(int32_t*)&test2==0x42480000L);
       }
     #endif
   } else {
